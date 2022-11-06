@@ -15,5 +15,5 @@ Based on the operation sent, perform a simple arithmetic operation on x and y
 Return a response with the result of the operation and your slack username
 { “slackUsername”: String, “result”: Integer } <br>
 Push to GitHub
-Sample Input { “operation_type”: Enum <addition | subtraction | multiplication> , “x”: Integer, “y”: Integer } <br>
+Sample Input { “operation_type”: Enum <addition | subtraction | multiplication> , “x”: Integer, “y”: Integer } <br>e
 Sample Response Format { “result”: Integer, “operation_type”: Enum.value }
