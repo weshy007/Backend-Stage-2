@@ -41,7 +41,11 @@ def arithmetic_view(request):
                 operation_type = "multiplication"
                 result = x * y
 
-            result = {"slackUsername": "Popsicool", "operation_type" : operation_type, "result": result }
+            result = {
+                "slackUsername": "ItsWeshy", 
+                "operation_type" : operation_type, 
+                "result": result
+                }
             return Response(result)
 
         operation_type = operation['operation_type']
@@ -54,5 +58,9 @@ def arithmetic_view(request):
             result = x - y
         else:
             result = x * y
-        result = {"slackUsername": "Popsicool", "operation_type" : operation_type, "result": result }
+        result = {
+            "slackUsername": "ItsWeshy", 
+            "operation_type" : operation_type, 
+            "result": result
+            }
         return Response(result)
