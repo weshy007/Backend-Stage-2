@@ -6,7 +6,12 @@ from django.http import JsonResponse
 @api_view(['GET', 'POST'])
 def arithmetic_view(request):
     if request.method == 'GET':
-        me = {"slackUsername": "Popsicool","backend":True, "age":27, "bio": "I'm a fullstack developer in developments stage, i'm passionate about learning and willing to do hard things" }
+        me = {
+                "slackUsername": "ItsWeshy",
+                "backend":True, 
+                "age":25, 
+                "bio": "Hooked on continuous self-improvement, open to new exciting opportunities and passionate about the Django backend space"
+            }
         return Response(me)
 
     if request.method == 'POST':
