@@ -1,54 +1,53 @@
-import operator
-from enum import Enum
-
-from django.shortcuts import render
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST
+from rest_framework.decorators import api_view
+import json
+from django.http import JsonResponse
 
-from .serializers import ArithmeticSerializer
+@api_view(['GET', 'POST'])
+def arithmetic_view(request):
+    if request.method == 'GET':
+        me = {"slackUsername": "Popsicool","backend":True, "age":27, "bio": "I'm a fullstack developer in developments stage, i'm passionate about learning and willing to do hard things" }
+        return Response(me)
 
-
-# Create your views here.
-class OperationEnum(Enum):
-    """An enumeration over acceptable operation types."""
-
-    addition = operator.add
-    add = operator.add
-    sum = operator.add
-    plus = operator.add
-    minus = operator.sub
-    subtract = operator.sub
-    subtraction = operator.sub
-    sub = operator.sub
-    multiply = operator.mul
-    mul = operator.mul
-    times = operator.mul
-
-
-@api_view(["POST"])
-def arithmetic_view(request, *args, **kwargs):
-    """Par se the JSON content of the request's POST and return
-    the result of the arithmetic operation in a specified format
-    """
-    if request.method == "POST":
-        serializer = ArithmeticSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            received_data = serializer.data
-            operation_type = received_data["operation_type"].lower().strip()
-            x = received_data["x"]
-            y = received_data["y"]
-            try:
-                input_operator = OperationEnum[operation_type].value
-            except Exception:
-                return Response("Unknown operation")
+    if request.method == 'POST':
+        operation = request.data
+        if (operation['operation_type'] not in ["addition", "subtraction", "multiplication"]):
+            string = operation['operation_type']
+            string = string.split()
+            sign = 0
+            for i in string:
+                if i.lower() in ["addition", "additions", 'add', 'adds', "plus", "adding", "plusing", "summation"]:
+                    sign = 1
+                    break
+                elif i in ["subtract", "subtracts", "subtraction", "minus", "remove", "deduct","subtractions", "deduction", "subtracting", "less"]:
+                    sign = 2
+                    break
+                else:
+                    sign = 3
+            x = operation['x']
+            y = operation['y']
+            if sign == 1:
+                operation_type = "addition"
+                result = x + y
+            elif sign == 2:
+                operation_type = "subtraction"
+                result = x - y
             else:
-                result = input_operator(x, y)
-                response_data = {
-                    "slackUsername": "itsweshy",
-                    "operation_type": operation_type,
-                    "result": result,
-                }
-                return Response(response_data)
-        return Response(status=HTTP_400_BAD_REQUEST)
+                operation_type = "multiplication"
+                result = x * y
+
+            result = {"slackUsername": "Popsicool", "operation_type" : operation_type, "result": result }
+            return Response(result)
+
+        operation_type = operation['operation_type']
+        x = operation['x']
+        y = operation['y']
+
+        if operation_type == "addition":
+            result = x + y
+        elif operation_type == "subtraction":
+            result = x - y
+        else:
+            result = x * y
+        result = {"slackUsername": "Popsicool", "operation_type" : operation_type, "result": result }
+        return Response(result)
